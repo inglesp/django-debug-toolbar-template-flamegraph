@@ -34,8 +34,15 @@ class Stack:
         for frame_ in frame['stack']:
             self._collapsed_helper(frame_, calls_, collapsed)
 
+    def normalised_collapsed(self):
+        collapsed = self.collapsed()
+        smallest_time = min(frame['time'] for frame in collapsed)
+        for frame in collapsed:
+            frame['time'] = int(frame['time'] / smallest_time)
+        return collapsed
+
     def as_flamegraph_pl_input(self):
-        lines = ['{} {}'.format(';'.join(frame['calls']), frame['time']) for frame in self.collapsed()]
+        lines = ['{} {}'.format(';'.join(frame['calls']), frame['time']) for frame in self.normalised_collapsed()]
         return '\n'.join(lines)
 
     def to_svg(self):
