@@ -25,6 +25,8 @@ if __name__ == '__main__':
         packages=find_packages(where='src'),
         package_dir={'': 'src'},
         install_requires=['django-debug-toolbar'],
+        include_package_data=True,
+        zip_safe=False,
         url='http://github.com/inglesp/django-debug-toolbar-template-flamegraph',
         author='Peter Inglesby',
         author_email='peter.inglesby@gmail.com',
