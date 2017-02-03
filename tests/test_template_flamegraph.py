@@ -83,6 +83,21 @@ def test_stack_collapsed(stack):
     ]
 
 
+def test_stack_as_flamegraph_pl_input(stack):
+    assert stack.as_flamegraph_pl_input() == '''
+a1 3
+a1;b1 1
+a1;b2 1
+a2 3
+a2;b3 1
+a2;b4 1
+    '''.strip()
+
+
+def test_stack_to_svg(stack):
+    assert 'svg version' in stack.to_svg()
+
+
 def test_wrap_for_flamegraph(patch_time):
     class C:
         def m(self, x):

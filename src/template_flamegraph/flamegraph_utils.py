@@ -1,4 +1,9 @@
+import os
+import subprocess
 import time
+
+
+FLAMEGRAPH_PL = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flamegraph.pl')
 
 
 class Stack:
@@ -28,6 +33,20 @@ class Stack:
         collapsed.append({'calls': calls_, 'time': time_})
         for frame_ in frame['stack']:
             self._collapsed_helper(frame_, calls_, collapsed)
+
+    def as_flamegraph_pl_input(self):
+        lines = ['{} {}'.format(';'.join(frame['calls']), frame['time']) for frame in self.collapsed()]
+        return '\n'.join(lines)
+
+    def to_svg(self):
+        proc = subprocess.Popen(
+            args=[FLAMEGRAPH_PL, '--title', ' '],
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True)
+        out, _ = proc.communicate(self.as_flamegraph_pl_input())
+        return out
 
 
 def wrap_for_flamegraph(fn, labeller, stack):
