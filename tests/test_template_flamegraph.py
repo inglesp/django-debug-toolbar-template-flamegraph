@@ -111,24 +111,9 @@ def test_wrap_for_flamegraph(patch_time):
     c = C()
     c.m(2)
 
-    assert stack.history['stack'] == [{
-        'label': 2,
-        'stack': [{
-            'label': 1,
-            'stack': [{
-                'label': 0,
-                'stack': [{
-                    'label': -1,
-                    'stack': [],
-                    'total_time': 1,
-                    'time_in_self': 1,
-                }],
-                'total_time': 3,
-                'time_in_self': 2,
-            }],
-            'total_time': 5,
-            'time_in_self': 2,
-        }],
-        'total_time': 7,
-        'time_in_self': 2,
-    }]
+    assert stack.collapsed() == [
+        {'calls': [2], 'time': 2},
+        {'calls': [2, 1], 'time': 2},
+        {'calls': [2, 1, 0], 'time': 2},
+        {'calls': [2, 1, 0, -1], 'time': 1},
+    ]
