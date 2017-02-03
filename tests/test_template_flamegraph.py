@@ -20,7 +20,8 @@ def patch_time(monkeypatch):
     monkeypatch.setattr(time, 'time', mocked_time())
 
 
-def test_stack():
+@pytest.fixture
+def stack():
     stack = Stack()
     stack.push('a1', 1)
     stack.push('b1', 2)
@@ -34,7 +35,10 @@ def test_stack():
     stack.push('b4', 10)
     stack.pop(11)
     stack.pop(12)
+    return stack
 
+
+def test_stack(stack):
     assert stack.history == {'stack': [{
         'label': 'a1',
         'stack': [{
@@ -68,21 +72,7 @@ def test_stack():
     }]}
 
 
-def test_stack_collapsed():
-    stack = Stack()
-    stack.push('a1', 1)
-    stack.push('b1', 2)
-    stack.pop(3)
-    stack.push('b2', 4)
-    stack.pop(5)
-    stack.pop(6)
-    stack.push('a2', 7)
-    stack.push('b3', 8)
-    stack.pop(9)
-    stack.push('b4', 10)
-    stack.pop(11)
-    stack.pop(12)
-
+def test_stack_collapsed(stack):
     assert stack.collapsed() == [
         {'calls': ['a1'], 'time': 3},
         {'calls': ['a1', 'b1'], 'time': 1},
