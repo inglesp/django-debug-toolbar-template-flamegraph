@@ -21,7 +21,7 @@ if __name__ == '__main__':
         name='django-debug-toolbar-template-flamegraph',
         version=VERSION,
         description='Template flamegraphs for Django Debug Toolbar',
-        long_description=read('README.rst'),
+        long_description=read('README.md'),
         packages=find_packages(where='src'),
         package_dir={'': 'src'},
         install_requires=['django-debug-toolbar'],
