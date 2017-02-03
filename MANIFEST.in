@@ -1,1 +1,2 @@
+include README.md
 include src/template_flamegraph/flamegraph.pl
