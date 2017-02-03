@@ -1,2 +1,3 @@
 include README.md
 include src/template_flamegraph/flamegraph.pl
+recursive-include src/template_flamegraph/templates *
