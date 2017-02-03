@@ -40,26 +40,57 @@ def test_stack():
         'stack': [{
             'label': 'b1',
             'stack': [],
-            't': 1,
+            'total_time': 1,
+            'time_in_self': 1,
         }, {
             'label': 'b2',
             'stack': [],
-            't': 1,
+            'total_time': 1,
+            'time_in_self': 1,
         }],
-        't': 5,
+        'total_time': 5,
+        'time_in_self': 3,
     }, {
         'label': 'a2',
         'stack': [{
             'label': 'b3',
             'stack': [],
-            't': 1,
+            'total_time': 1,
+            'time_in_self': 1,
         }, {
             'label': 'b4',
             'stack': [],
-            't': 1,
+            'total_time': 1,
+            'time_in_self': 1,
         }],
-        't': 5,
+        'total_time': 5,
+        'time_in_self': 3,
     }]}
+
+
+def test_stack_collapsed():
+    stack = Stack()
+    stack.push('a1', 1)
+    stack.push('b1', 2)
+    stack.pop(3)
+    stack.push('b2', 4)
+    stack.pop(5)
+    stack.pop(6)
+    stack.push('a2', 7)
+    stack.push('b3', 8)
+    stack.pop(9)
+    stack.push('b4', 10)
+    stack.pop(11)
+    stack.pop(12)
+
+    assert stack.collapsed() == [
+        {'calls': ['a1'], 'time': 3},
+        {'calls': ['a1', 'b1'], 'time': 1},
+        {'calls': ['a1', 'b2'], 'time': 1},
+        {'calls': ['a2'], 'time': 3},
+        {'calls': ['a2', 'b3'], 'time': 1},
+        {'calls': ['a2', 'b4'], 'time': 1},
+    ]
 
 
 def test_wrap_for_flamegraph(patch_time):
@@ -89,11 +120,15 @@ def test_wrap_for_flamegraph(patch_time):
                 'stack': [{
                     'label': -1,
                     'stack': [],
-                    't': 1,
+                    'total_time': 1,
+                    'time_in_self': 1,
                 }],
-                't': 3,
+                'total_time': 3,
+                'time_in_self': 2,
             }],
-            't': 5,
+            'total_time': 5,
+            'time_in_self': 2,
         }],
-        't': 7,
+        'total_time': 7,
+        'time_in_self': 2,
     }]
